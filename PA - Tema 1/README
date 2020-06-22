@@ -1,0 +1,126 @@
+SERBOI FLOREA-DAN 325CB
+
+P1) - Bani
+
+Pentru problema s-a folosit tehnica de programare dinamica impreuna cu Divide 
+Et Impera(ridicare modulara a puterii in timp logaritmic).
+Alegerea unei bancnote la pasul curent este constransa de ce bancnota a fost 
+inainte.
+Prin urmare, numarul de moduri in care Gigel poate aranja i bancnote, avand in 
+vedere ca ultima bancnota aleasa la pasul i este X, este suma modurilor in care 
+Gigel poate aranja i-1 bancnote cu ultima bancnota de la pasul i-1 fiind una 
+din cele permise.
+Astfel, pentru tipul 1, avem urmatoarele constrangeri(care determina 
+recurentele):
+- daca se alege o bancnota de 10, inainte a fost una de 50, 100 sau 500;
+- daca se alege o bancnota de 50, inante a fost una de 10 sau 200;
+- daca se alege o bancnota de 100. inainte a fost una de 10 sau 100;
+- daca se alege o bancnota de 200, inainte a fost una 50 sau 500;
+- daca se alege o bancnota de 500, inainte a fost una de 200.
+Pentru tipul 2, singura deosebire este urmatoarea:
+- daca se alege o bancnota de 100, inainte a fost una de 10, 100 sau 200*.
+
+Pentru tipul 1 observam ca daca facem suma modurilor pentru fiecare bancnota la 
+pasul i obtinem de 2 ori suma modurilor pentru fiecare bancnota la pasul i - 1.
+Astfel S(n) = S(n-1) * 2 = S(n-2) * 2 * 2 = ... = 2^(n-1) * S(1) si putem 
+calcula chiar in O(log n) numarul total de moduri, folosind un algoritm Divide 
+Et Impera pentru a ridica la putere.
+
+Pentru tipul 2 calculam fiecare recurenta separat deoarece nu putem scrie o 
+relatie de recurenta pentru numarul total de moduri fara a tine minte numarul 
+de moduri pentru bancnota de 200 de la pasul anterior, ceea ce implica sa tinem 
+minte numarul de moduri pentru fiecare bancnota.
+
+Rezultatul este suma acestor numere care reprezinta ca s-au folosit N bancnote, 
+ultima fiind X unde X este 10, 50, 100, 200 sau 500.
+
+Complexitatea temporala pentru primul tip de instructiuni este O(logn) deoarece 
+se foloseste exponentiere logaritmica(realizata cu ajutorul unui algoritm 
+Divide Et Impera), iar pentru cel de-al doile tip de instructiuni este O(n) 
+deoarece se calculeaza toate solutiile partiale pentru fiecare ultima bancnota 
+aleasa.
+Complexitate spatiala pentru ambele tipuri de instructiuni este O(1) deoarece 
+evitam sa folosim vreun vector de programare dinamica care sa retina solutiile 
+partiale de la pasii precedenti.
+Pentru tipul 1 de instructiuni se foloseste o formula, deci nu avem nevoie de 
+variabile suplimentare.
+Pentru tipul 2 de instructiuni sunt folosite variabile care sa retina numarul 
+de moduri in care pot fi aranjate bancnotele cu ultima bancnota aleasa fiind X 
+unde X poate fi 10, 50, 100, 200 sau 500 atat la pasul curent cat si la cel 
+anterior.
+
+P2) - Gard
+
+Pentru aceasta problema s-a folosit un algoritm de tip Greedy.
+
+Am construit o clasa pentru bucati care sa contina coordonatele start si end.
+Am sortat bucatile de gard descrescator dupa end si crescator dupa start.
+Astfel, se aleg intotdeauna doar bucatile care aduc un plus in constructia 
+gardului, adica cele care au start mai mic decat start-ul curent(pe care il 
+actualizam). Altfel, daca start-ul este mai mare decat start-ul curent, cum 
+end-ul actual este mai mic decat orice end precedent, inseamna ca gardul este 
+inclus in altul.
+
+Complexitate temporala este O(nlogn) deoarece este implicata sortarea 
+vectorului de bucati de gard. Altfel, doar se mai efectueaza parcurgeri liniare 
+cand citim din fisier si cand calculam rezultatul.
+Complexitatea spatiala este O(n) deoarece stocam intr-un vector de lungime n 
+toate bucatile de gard(care au la randul 2 variabile pentru coordonate).
+
+P3) - Bomboane
+
+Pentru aceasta problema s-a folosit programarea dinamica ca tehnica.
+
+Pentru a genera solutia finala, folosim o matrice cu N + 1 linii si M + 1 
+coloane, in care "memoizam" solutiile partiale ale subproblemlor. Astfel, 
+solutia se genereaza "bottom-up".
+
+Astfel dp[i][j] reprezinta numarul de moduri in care se pot imparti j bomboane 
+primilor i copii.
+
+Cazul de baza reprezinta numarul de moduri in care poate imparti suma j 
+primului copil, 1 mod pentru fiecare valoare din intervalul sau.
+
+Rezultatele partiale vor fi construite tinand cont de urmatoarele:
+
+- fiecare numar de bomboane din intervalul copilului curent trebuie adaugat la 
+sumele deja existente, dar fara a depasi M;
+- doar daca avem o suma diferita de 0 la pasul precedent, inseamna ca am 
+impartit bomboane tuturor copiilor precedenti. 
+- la numarul de moduri pentru suma curenta se adauga numarul de moduri pentru 
+suma deja existenta.
+
+Complexitatea temporala este O(N * M ^ 2) deoarece avem 3 for-uri imbricate, cu 
+primul for care parcurge urmatorii N -1 copii, al doilea for parcurge pentru 
+copilul curent fiecare numar de bomboane posibil din interval - numar de pasi 
+proportional cu M, iar al treilea parcurge rezultatele partiale(unde se impart 
+bomboane tuturor copiilor precedenti) - numar de pasi proportional cu M.
+Complexitatea spatiala este O(N * M) din cauza matricii de "memoizare" a 
+solutiilor subproblemlor.
+
+P4) - Sala
+
+La problema 4 ca tehnica de programare se foloseste Greedy.
+
+Se sorteaza ganterele, ca prim criteriu, descrescator dupa greutate si, ca al 
+doilea criteriu, descrescator dupa numarul de repetari.
+
+Cum solutia nu trebuie sa foloseasca exact M gantere, ci cel mult M, pentru 
+primele M gantere maximul global poate fi obtinut la orice pas. Noi tinem minte 
+numarul de repetari total pentru ganterele aflate in coada de 
+prioritate(introduse numai dupa numarul de repetari).Aceasta coada de 
+prioritate contine doar numarul de repetari fiindca pe noi ne intereseaza doar 
+numarul total de repetari si greutatea minima(care este cea a ultimii 
+introduceri). Maximul local e dat de numarul total de repetari pentru ganterele 
+aflate in coada de prioritate * greutatea ultimii gantere folosite (care e 
+minima). Conduce la un maxim global.
+
+Complexitatea temporala a sortarii vectorului de gantere este O(N*logN).
+Adaugarea a M elemente in coada de prioritate se face in O(MlogM).
+Pentru adaugarea unui element in coada de prioritate complexitatea este 
+O(logM). 
+Pentru scoaterea unui element din coada de prioritate complexitatea este O(M).
+Avand in vedere ca noi putem scoate si adauga un numarul de N - M elemente, 
+complexitatea pentru toate aceste operatii ar fi O(M*(N-M)).
+Complexitatea spatiala este O(N) deoarece stocam toate ganterele cu greutatea 
+si numarul de repetari aferent.
