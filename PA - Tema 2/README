@@ -1,0 +1,185 @@
+SERBOI FLOREA-DAN 325CB
+
+P1)
+
+Problema 1 are in clasa statica Task
+	- ca variabile membru:
+		- ORAS_ROBIN = 1, Robin se afla in orasul cu indexul 1;
+		- NR_ORASE_DEBLOCATE = 100, deblocam pe rand maxim 100 de orase 
+pentru a converge mai repede catre solutie, respectand ordinea din permutare;
+		- N, numarul de orase;
+		- M, orasele sunt conectate intre ele prin M drumuri 
+bidirectionale;
+		- K, numarul de orase din care lorzii vor incepe cautarile;
+		- oraseStart, vector cu orasele din care lorzii vor incepe 
+cautarile;
+		- permOraseBlocate, vector cu permutarea oraselor pe care 
+armata lui Robin le va bloca;
+		- adj, liste de adiacenta pentru orase.
+	- ca metode:
+		- readInput: se citesc valorile variabilelor membru din 
+fisierul de input: N, M, K, oraseStart, permOraseBlocate, adj;
+		- writeOutput: se scrie in fisierul de output numarul minim de 
+orase care trebuie blocate pentru ca Robin sa nu fie descoperit;
+		- computeSolution: vom porni din starea initiala in care toate 
+orasele din permutare sunt blocate, si vom debloca pe rand maxim 100 de orase 
+pentru a converge mai repede catre intervalul care contine numarul minim de 
+orase care trebuiesc blocate. Odata gasit intervalul, blocam orasele din acest 
+interval pentru a reveni la starea pasului anterior si apoi deblocam pe rand 
+cate un oras pana cand Robin devine descoperit. Daca Robin a devenit descoperit 
+dupa deblocarea orasului curent, inseamna ca trebuie sa il blocam si pe acesta, 
+deci numarul minim de orase blocate este egal cu indexul acestui oras;
+		- descoperit: verifica daca pe graful curent, Robin poate fi 
+descoperit sau nu. Returneaza 1 daca poate fi descoperit, 0 altfel. Tinem minte 
+intr-un vector de vizitati daca un nod a mai fost sau nu vizitat(1 daca nodul a 
+fost vizitat, 0 altfel). Plecam din fiecare K orase(putem porni din oras doar 
+daca nu a mai fost vizitat si daca este deblocat) si vedem daca putem ajunge la 
+Robin (in orasul 1) printr-o parcurgere de tip BFS. Daca Robin a fost gasit 
+dupa o astfel de parcurgere, nu are sens sa mai continuam;
+		- bfs: metoda efectueaza o parcurgere BFS a oraselor. Daca 
+Robin a fost gasit, nu are sens sa mai continuam si iesim din functie.
+		- blocareOraseInt: blocheaza orasele dintr-un interval dat 
+(elimina drumurile adiacente lor)
+		- deblocareOraseInt: metoda deblocheaza orasele dintr-un 
+interval dat(adauga drumurile adiacente oraselor deblocate)
+		- deblocareOras: metoda deblocheaz un oras. Adaugam muchii doar 
+daca orasul adiacent este deblocat;
+		- solve: aici se efectueaza toate operatiile(citire, 
+prelucrare, scriere).
+
+Complexitatea algoritmului este O(N(M+N)) deoarece:
+- se incearca parcurgerea permutarii oraselor blocate de la sfarsit catre 
+inceput (in numar de N - 1) si deblocarea oraselor(initial, la fiecare pas un numar de NR_ORASE_DEBLOCATE, pentru a 
+converge mai repede cate solutie, si apoi, cate 
+unul, odata ce am identificat intervalul cu numarul minim), care poate duce la 
+deblocarea tuturor muchiilor(in numar de M), iar complexitatea pentru metoda 
+descoperit(care efectuaza cate o parcurgere BFS din fiecare oras de start) este 
+O(M+N).
+Obs. Pentru un graf rar(M~N), se obtine o complexitate temporala O(N^2).
+Complexitatea spatiala este O(M+N) fiind data in special de listele de 
+adiacente care retin muchiile grafului (O(M)) si de vectorii/structurile de 
+date auxiliare folosite(O(N)).
+
+P2)
+
+Problema 2 are in clasa statica Task
+	- ca variabile membru:
+		- MAX, efortul maxim(considerat infinit) pentru a ajunge 
+intr-un oras;
+		- N, numarul de orase;
+		- M, orasele sunt conectate intre ele prin M drumuri 
+unidirectionale;
+		- sursa, orasul sursa;
+		- dest, orasul destinatie;
+		- adj, listele drumurilor unidirectionale de la orasul i la 
+orasul j care necesita efortul e.
+	- clasa Drum: reprezinta drumul catre un oras destinatie, contine 
+orasul destinatie si efortul pe care trebuie sa il depuna Robin pentru a ajunge.
+	- ca metode:
+		- readInput: se citesc valorile variabilelor membru din 
+fisierul de input: N, M, sursa, dest, adj;
+		- writeOutput: se scrie in fisierul de output efortul minim pe 
+care trebuie sa il depuna Robin pentru a ajunge de la sursa la destinatie;
+		- getResult: pentru a afla efortul minim pentru a ajunge de la 
+sursa la destinatie, folosim Bellman-Ford optimizat pe graful orientat cu N 
+noduri, M arce, stocat in adj, pentru a afla distanta minima de la nodul sursa 
+la destinatie. Optimizarea consta in faptul ca daca d[v](efortul minim pentru a 
+ajunge de la sursa la v) nu se modifica la pasul curent atunci nu trebuie sa 
+mai relaxam niciunul din arcele care pleaca din v la pasul urmator. Astfel, 
+folosim o coada de prioritate in care tinem varfurile modificate si un vector 
+prin care marcam nodurile pentru care am facut relaxare. Aceasta varianta are 
+dezavantajul ca nu mai detecteaza ciclurile negative, dar o putem folosi 
+deoarece in enunt se specifica ca nu exista cicluri;
+		- solve: aici se efectueaza toate operatiile(citire, 
+prelucrare, scriere).
+
+Complexitatea temporala a algoritmului este O(M*N). Pentru un graf rar(N~M), 
+complexitatea este O(N^2).
+Complexitatea spatiala este O(M+N) fiind data in special de listele de 
+adiacente care retin muchiile grafului (O(M)) si de vectorii/structurile de 
+date auxiliare folosite(O(N)).
+
+P3)
+
+Problema 3 are in clasa statica Task
+	- ca variabile membru:
+		- MAX, efortul maxim(considerat infinit) pentru a ajunge 
+intr-un oras;
+		- N, numarul de orase;
+		- M, numarul drumurilor unidirectionale;
+		- E, valoarea initiala a energiei lui Robin;
+		- energ, valoarea finala a energiei lui Robin;
+		- adj, listele drumurilor unidirectionale de la orasul i la 
+orasul j pentru care Robin pierde procentul de energie p.
+	- clasa Drum care reprezinta drumul catre un oras destinatie, contine 
+orasul destinatie si energia pe care o pierde Robin(in procente) pentru a 
+ajunge;
+	- clasa Oras care contine orasul si costul corespunzator(calculat prin 
+logaritmare);
+	- ca metode:
+		- readInput: se citesc valorile variabilelor membru din 
+fisierul de input: N, M, E, adj;
+		- writeOutput: se scrie in fisierul de output pe prima linie 
+energia cu care Robin ajunge la Notthingam si pe a doua linie drumul ales de 
+acesta pentru a maximiza energia ramasa la final;
+		- getResult: aici calculam energia cu care Robin ajunge la 
+Notthingam si drumul ales de acesta pentru a maximiza energia ramasa la final. 
+Energia pierduta de Robin este egala cu 
+E(1-(1-p1/100)*(1-p2/100)*...*(1-pn/100)). Observam ca a obtine energia 
+pierduta minima este totuna cu a obtine valoarea minima pentru 
+(-log(1-p1/100))+(-log(1-p2/100))+...+(-log(1-pn/100)). Astfel vom aplica 
+Dijkstra inlocuind costurile initiale cu costul (-log(1-p1/100)). Aceasta 
+varianta cu implementata folosind heap binar.
+		- solve: aici se efectueaza toate operatiile(citire, 
+prelucrare, scriere).
+
+Complexitatea temporala este O(M*logN) deoarece sunt relaxate toate muchiile o 
+singura data (O(M)), extragerea minimului se va executa în timp O(logN) si 
+actualizarea valorii nodului in coada de prioritate se va executa tot în timp 
+O(logN) (stergere nod cu valoarea veche si adaugarea nod cu valoarea noua). 
+Pentru un graf rar(M~N), complexitatea temporala este O(N*logN).
+Complexitatea spatiala este O(M+N) fiind data in special de listele de 
+adiacente care retin muchiile grafului (O(M)) si de vectorii/structurile de 
+date auxiliare folosite(O(N)).
+
+Bonus)
+
+Bonusul are in clasa statica Task
+	- ca variabile membru:
+		- T, timpul pe care il are Robin la dispozitie;
+		- N, numarul de busteni;
+		- xMaid si yMaid, coordonatele lui Maid;
+		- E1, E2, E3, energia consumata pentru fiecare tip de decizie;
+		- xStart, yStart, xEnd, yEnd, coordonatele capetelor bustenilor 
+la fiecare moment de timp;
+		- m, coordonatele capetelor bustenilor la fiecare moment de 
+timp.
+	- ca metode:
+		- readInput: se citesc datele de intrare si se calculeaza 
+coordonatele capetelor bustenilor pentru fiecare moment de timp;
+		- computeSolution: se genereaza pornind de la primul capat al 
+busteanului 1 toate posibilele decizii pe care le poate Robin la un moment de 
+timp. Se verifica daca in urma deciziei se ajunge la Maid si daca energia 
+consumata e minima. Se scrie in fisierul de output energia minima pe care 
+trebuie sa o consume Robin pentru a reusi sa o salveze pe Maid la timp, numarul 
+de miscari pe care trebuie sa le  faca Robin pentru a ajunge la destinatie si 
+miscarile efectuate;
+		- generateDecisions: aceasta functie genereaza toate deciziile 
+posibile data find o pozitie si minimul curent;
+		- newCoord: se genereaza noile coordonate x si y dupa miscarea 
+in directia data.
+
+Mai este prezenta clasa Pos, care reprezinta starea/pozitia lui Robin la un 
+moment de timp si are urmatoarele variabile membru: 
+	- x si y, coordonatele lui Robin;
+	- bustean, busteanul pe care se afla;
+	- t, timpul trecut;
+	- en, energia consumata;
+	- lastPos, ultima pozitie/stare;
+	- typeOfMove, tipul miscarii.
+
+Complexitatea temporala este exponentiala: O(x^T), unde x este numarul de 
+miscari posibile la fiecare moment de timp, iar T timpul pe care Robin il are 
+la dispozitie.
+Complexitatea spatiala este tot O(x^T) deoarece fiecare mutare posibila este 
+memorata si adaugata in coada.
